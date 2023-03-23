@@ -1,0 +1,48 @@
+---
+
+- hosts: ubuntu.my
+  become: yes
+  tasks:
+  - name: Install bind on Ubuntu
+    apt:
+      name=bind9
+      state=latest
+    notify:
+      bind9 systemd
+  - name: Install nginx on Ubuntu
+    apt:
+      name=nginx
+      state=latest
+    notify:
+      nginx systemd
+  - name: Install apache2 on Ubuntu
+    apt:
+      name=apache2
+      state=latest
+    notify:
+      apache2 systemd
+  - name: Install PHP on Ubuntu
+    apt:
+      name=php
+      state=latest
+  - name: Install libapache2 on Ubuntu
+    apt:
+      name=libapache2-mod-php
+      state=latest
+
+  handlers:
+  - name: bind9 systemd
+    systemd:
+     name: bind9.service
+     enabled: yes
+     state: started
+  - name: nginx systemd
+    systemd:
+     name: nginx.service
+     enabled: no
+     state: stopped
+  - name: apache2 systemd
+    systemd:
+     name: apache2.service
+     enabled: yes
+     state: started

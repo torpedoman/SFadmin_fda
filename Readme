@@ -1,0 +1,7 @@
+## Сценарии ansible итогового поекта.
+hosts - инвентарь;
+inst_server2.yml - установка ПО на Сервер-2 задания;
+inst_zabbix.yml - установка zabbix-agent на Сервер 2-3 задания (ubuntu и centos);
+inst_PSQL.yml - установка PSQL-12 на Сервер-3 задания;
+## Пакеты elasticseach, filebeat, logstash, kibana устанавливались локально, из-за блокировки росийских IP elastic.co;
+## Пакеты почты postfix, dovecot, roundcube тоже локально;

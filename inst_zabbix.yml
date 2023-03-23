@@ -1,0 +1,36 @@
+---
+
+- hosts: ubuntu.my:centos.my
+  become: yes
+  tasks:
+  - name: Set localtime
+    shell: timedatectl set-timezone Europe/Moscow 
+  - name: Install zabbix-agent on RedHat Family
+    yum:
+      name=zabbix-agent
+      state=latest
+    when:
+      ansible_os_family == "RedHat"
+    notify:
+      zabbix-agent systemd
+  - name: Install zabbix-agent on Ubuntu
+    apt:
+      name=zabbix-agent
+      state=latest
+    when:
+      ansible_os_family == "Debian"
+    notify:
+      zabbix-agent systemd
+  - name: configure Server IP
+    shell: sed -i 's/Server=127.0.0.1/Server=10.8.0.1/' /etc/zabbix/zabbix_agentd.conf     
+  - name: configure ServerActive IP
+    shell: sed -i 's/ServerActive=127.0.0.1/ServerActive=10.8.0.1/' /etc/zabbix/zabbix_agentd.conf
+  - name: system configure Hostname
+    shell: host=`hostname`;sed -i 's/Hostname=Zabbix server/Hostname='$host'/' /etc/zabbix/zabbix_agentd.conf
+
+  handlers:
+  - name: zabbix-agent systemd
+    systemd:
+     name: zabbix-agent.service
+     enabled: yes
+     state: started
